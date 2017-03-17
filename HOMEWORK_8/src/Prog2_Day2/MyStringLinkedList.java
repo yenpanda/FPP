@@ -1,3 +1,23 @@
+/*
+ * -->[NULL]
+-->[Carrot Cake]-->[NULL]
+-->[Coffee]-->[Carrot Cake]-->[NULL]
+-->[AAA]-->[Coffee]-->[Carrot Cake]-->[NULL]
+-->[AAA]-->[BBB]-->[Coffee]-->[Carrot Cake]-->[NULL]
+4
+-->[AAA]-->[KDDD]-->[BBB]-->[Coffee]-->[Carrot Cake]-->[NULL]
+AAA
+Carrot Cake
+-->[KDDD]-->[BBB]-->[Coffee]-->[Carrot Cake]-->[NULL]
+last:Carrot Cake
+-->[KDDD]-->[BBB]-->[Coffee]-->[NULL]
+Max: KDDD
+Min: BBB
+I am here 4
+-->[KDDD]-->[BBB]-->[Coffee]-->[NULL]
+ */
+
+
 package Prog2_Day2;
 
 public class MyStringLinkedList {
@@ -48,7 +68,6 @@ public class MyStringLinkedList {
 			Node tmp = n.next;
 			newPostNode = new Node(n,value, n.next);
 			n.next = newPostNode;
-			//n.next.previous = newPostNode;
 			newPostNode.next = tmp;
 		}
 					
@@ -89,9 +108,11 @@ public class MyStringLinkedList {
     public Node getLast(){
     	if(header == null)
     		return null;
+    	else if (header.next == null)
+    		return header;
     	else {
     		Node tmp = header;
-        	while(tmp!=null){
+        	while(tmp.next!=null){
         		tmp = tmp.next;
         	}	
         	return tmp;
@@ -100,9 +121,10 @@ public class MyStringLinkedList {
     
 // implement removeFirst()
     public void removeFirst(){
-    	if(header == null || header.next == null)
+    	if(header == null)
     		return;
     	else {
+    		header.previous = null;
     	    header = header.next;
     	}
     }
@@ -111,10 +133,12 @@ public class MyStringLinkedList {
     public void removeLast(){
     	if(header == null)
     		return;
+    	else if(header.next==null){
+    		header=null;
+    	}
     	else {
-    		Node tmp = header;
-			while (tmp != null)
-				tmp = tmp.next;
+    		Node tmp = getLast();
+    		System.out.println("last:"+tmp);
 			tmp.previous.next = null;
     	}
     }
@@ -174,7 +198,6 @@ public class MyStringLinkedList {
 			n.previous.next = newNode;
 			n.previous = newNode;
 		}	
-	
 	}
 	
 	public Node findLast() {
@@ -189,15 +212,16 @@ public class MyStringLinkedList {
 	}
 
 	public Node findItem(String str) {
-		if (header == null)
+		if(header == null)
 			return null;
-		else {
-			Node temp = header;
-			while (temp != null)
-				if (str.equals(temp.value))
-					return temp;
+		else{
+			Node tmp = header;
+			while(tmp!=null){
+				if(tmp.value.equals(str))
+					return tmp;
 				else
-					temp = temp.next;
+					tmp = tmp.next;
+			}
 			return null;
 		}
 	}
@@ -229,7 +253,31 @@ public class MyStringLinkedList {
 				System.out.println("I am here 4");
 			}
 		}
-
+//
+//		if(header == null || n == null){
+//			return;
+//		}
+//		else{
+//			Node tmp = header;
+//			while(tmp!=null){
+//				if(tmp.value.equals(n.value)){
+//					if(tmp.previous == null){
+//						tmp.next = header;
+//						tmp.next.previous = null;
+//					}
+//					else if(tmp.next == null)
+//						tmp.previous.next = null;
+//					else{
+//						tmp.previous.next = tmp.next;
+//						tmp.next.previous = tmp.previous;
+//					}
+//					tmp = null;
+//				}
+//				else
+//					tmp = tmp.next;
+//			}
+//		}
+//	
 	}
 	
 	public void deleteList(){
@@ -304,6 +352,9 @@ public class MyStringLinkedList {
 		System.out.println(mySL);
 		mySL.printMax();
 		mySL.printMin();
+		mySL.deleteNode(mySL.header);
+		System.out.println(mySL);
+		
 //		mySL.postAddNode(mySL.header, "1111");
 //		System.out.println(mySL);
 //		mySL.printReverse();
