@@ -1,3 +1,15 @@
+/* RESULT: 
+1,2,3,9,12,15,16,19,22,25,56,100,
+VLR: 15,12,9,1,3,2,56,16,19,22,25,100,
+LRV: 1,2,3,9,12,15,16,19,22,25,56,100,
+Check contains 2: true
+Get Root: 15
+Numbers of leaf node: 3
+Get Size: 12
+Is Empty Check: false
+Min: 1
+Max: 100
+ */
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -5,6 +17,9 @@ import java.util.TreeSet;
 public class MyBST {
 	/** The tree root. */
 	private BinaryNode root;
+	private int size = 0;
+	private int min;
+	private int max;
 
 	public MyBST() {
 		root = null;
@@ -32,16 +47,16 @@ public class MyBST {
 		postOrder(t.right);
 	}
 	
-//	public void inOrder(){ 
-//		inOrder(root);
-//	}
-//	private void inOrder(BinaryNode t){ //implement 
-//		if(t==null)
-//			return;
-//		inOrder(t.left);
-//		System.out.print(t.element + ",");
-//		inOrder(t.right);
-//	}
+	public void inOrder(){ 
+		inOrder(root);
+	}
+	private void inOrder(BinaryNode t){ //implement 
+		if(t==null)
+			return;
+		inOrder(t.left);
+		inOrder(t.right);
+		System.out.print(t.element + ",");
+	}
 
 	public boolean contains(Integer key){
 		BinaryNode t = root;
@@ -65,6 +80,70 @@ public class MyBST {
 		else
 			return -1;
 	}
+	
+	public Integer leafNodes(){
+		return leafNodes(root);
+	}
+	static int sum = 0;
+	private int leafNodes(BinaryNode t){// Implement
+		
+		if(t!= null){
+			if(t.left == null && t.right == null)
+				sum++;
+			else{
+				leafNodes(t.left);
+				leafNodes(t.right);
+			}
+		}	
+		return sum;
+	}
+	public int size(BinaryNode t){
+		if(t == null)
+			return size;
+		else{
+			size++;
+			size(t.left);
+			size(t.right);
+		}
+		return size;
+	}
+	public int size(){//implement
+		 return size(root);
+	}
+	
+	public boolean isEmpty(){
+		return root == null;
+	}
+	
+	public Integer findMin(){
+		min = root.element;
+		return findMin(root);
+	}
+	
+	private Integer findMin(BinaryNode t){
+		if(t != null){
+			if(min > t.element )
+				min = t.element;
+			findMin(t.left);
+			findMin(t.right);
+		}
+		return min;
+	}
+	public Integer findMax(){
+		max = root.element;
+		return findMax(root);
+	}
+	private Integer findMax(BinaryNode t){
+		if(t !=null){
+			if(max < t.element)
+				max = t.element;
+			findMax(t.left);
+			findMax(t.right);
+		}		
+		return max;
+	}
+	
+	
 	/**
 	* Prints the values in the nodes of the tree
 	* in sorted order. Inorder Traversal
@@ -153,21 +232,28 @@ public class MyBST {
 		
 		MyBST mybst = new MyBST();
 		
-		//int [] a = {15, 12, 9, 56, 1, 16, 19, 22, 3, 100, 2, 25};
-		int [] a = {43,15,8,30,20,35,60,50,82,70};
+		int [] a = {15, 12, 9, 56, 1, 16, 19, 22, 3, 100, 2, 25};
 		for (int j = 0; j < a.length; j++ ) {
 			mybst.insert(a[j]);
 					
 		}
 		//mybst.insert(12);
 		mybst.printTree();
-		System.out.println("");
+		System.out.println();
+		System.out.print("VLR: ");
 		mybst.preOrder();
-		System.out.println("");
+		System.out.println();
+		System.out.print("LRV: ");
 		mybst.postOrder();
-		System.out.println("");
-		System.out.println("Check 20: " + mybst.contains(20));
+		System.out.println();
+		System.out.println("Check contains 2: " + mybst.contains(2));
 		System.out.println("Get Root: " + mybst.getRoot());
+		System.out.format("Numbers of leaf node: %d",mybst.leafNodes());
+		System.out.println();
+		System.out.println("Get Size: " + mybst.size());
+		System.out.println("Is Empty Check: " + mybst.isEmpty());
+		System.out.println("Min: "+ mybst.findMin());
+		System.out.println("Max: "+ mybst.findMax());
 		
 //		TreeSet<Integer> ts = new TreeSet<Integer>();
 //		
